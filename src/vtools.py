@@ -19,8 +19,14 @@ class Variant:
     def update(self, cmd, cond):
         return "vtools update {} {}".format(self.name, cond)
 
-#class MDS:
-    
+class MDS:
+    def __init__(self, var, jobname='King'):
+        self.tbl = var.name
+        self.jobname
+        self.cmds = 'vtools execute KING --jobnmae {} --var_table {}'.format(jobname, var.name)
+        
+    def plot_with(self, pheno, sond='1'):
+        return 'vtools_report plot_pheno_fields {0}_MDS1 {0}_MDS2 {1} --samples {2} --dot {0}_with_{1}.pdf --discrete_color Accent'.format(self.jobname, pheno, soncd)
 
 
 class TiTv:
