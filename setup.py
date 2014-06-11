@@ -10,7 +10,7 @@ for item in ['faulthandler']:
     except ImportError:
         sys.exit('Cannot build package: missing module "{}"!'.format(item))
 
-from source import VERSION
+from src import VERSION
 from distutils.core import setup
 try:
    from distutils.command.build_py import build_py_2to3 as build_py
