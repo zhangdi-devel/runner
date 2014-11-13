@@ -22,7 +22,7 @@ NAME = "Runner"
 
 setup(name = NAME,
     version = VERSION,
-    description = "A general pipeline to run bioinformatical job in cluster",
+    description = "A general pipeline to run jobs in cluster",
     author = "Di Zhang",
     packages = [NAME],
     scripts = ['src/run.py'],
