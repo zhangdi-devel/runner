@@ -89,7 +89,7 @@ class Use(Args):
         self.anno_type = Anno_type
         self.linked_fields = Linked_fields
         self.files = Files
-        self.rebuild Rebuild
+        self.rebuild = Rebuild
         self.jobs = Jobs
 
     def Run(self):
