@@ -32,7 +32,7 @@ class MDS:
     def __init__(self, var, jobname='King', scond=1):
         self.tbl = jobname
         self.jobname = jobname
-        self.cmds = '{}\n'.format(var.born(self.tbl, "mafQC>=0.01 and chr<>'X'").create) + \
+        self.cmds = '{}\n'.format(var.born(self.tbl, "mafQC>0.01 and chr<>'X'").create) + \
                     'vtools execute KING --jobname {} --var_table {} --samples "{}"'.format(jobname, self.tbl, scond)
         
     def plot_with(self, pheno, scond='1'):
