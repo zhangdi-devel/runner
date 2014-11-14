@@ -17,6 +17,7 @@ class Args:
     
 class Init(Args):
     def __init__(self, Project='test', Build='hg19', Force=False):
+        Args.__init__(self)
         self.project = Project
         self.build = Build
         self.force = Force
@@ -29,6 +30,7 @@ class Init(Args):
 
 class Import(Args):
     def __init__(self, Input_files='', Format='', Build='hg19', Sample_name=[], Force=False, Jobs=1):
+        Args.__init__(self)
         self.input_files = Input_files
         self.build = Build
         self.format = Format
@@ -42,6 +44,7 @@ class Import(Args):
 
 class Update(Args):
     def __init__(self, Table='variant', From_file='', Format='', Sample_name=[], Jobs=1, Set=[], From_stat=[], Samples=[], Genotypes=[]):
+        Args.__init__(self)
         self.table = Table
         self.from_file = From_file
         self.format = Format
@@ -62,6 +65,7 @@ class Update(Args):
 
 class Phenotype(Args):
     def __init__(self, From_file='', Set=[], From_stat=[], Output=[], Jobs=1, Genotypes=[], Samples=[], Header=[], Delimiter='\t', Na='NA', Limit=-1):
+        Args.__init__(self)
         self.from_file = From_file
         self.output = Output
         self.jobs = Jobs
@@ -83,6 +87,7 @@ class Phenotype(Args):
 
 class Use(Args):
     def __init__(self, Source='', As='', Linked_by=[], Anno_type='', Linked_fields=[], Files=[], Rebuild=False, Jobs=1):
+        Args.__init__(self)
         self.source = Source
         setattr(self, 'as', As) #hack ...
         self.linked_by = Linked_by
@@ -117,6 +122,7 @@ class Compare(Args):
 
 class Associate(Args):
     def __init__(self, Variants='', Phenotypes=[], Covariates=[], Var_info=[], Geno_info=[], Geno_name='GT', Methods=[], Group_by=[], Samples=[], Genotypes=[], Discard_samples=[], Discard_variants=[], To_db='', Delimiter=None, Force=False, Jobs=1):
+        Args.__init__(self)
         self.variants = Variants
         self.phenotypes = Phenotypes
         self.covariants = Covariants
@@ -140,6 +146,7 @@ class Associate(Args):
 
 class GeneralOutput(Args):
     def __init__(self, Header=[], Delimiter=None, Na='.', Limit=None, Build='hg19', Group_by=[], All=False, Order_by=[]):
+        Args.__init__(self)
         self.header = Header
         self.delimiter = Delimiter
         self.na = Na
@@ -150,7 +157,8 @@ class GeneralOutput(Args):
         self.order_by = Order_by
         
 class Select(GeneralOutput):
-    def __init__(self, From_table='', Condition=[], Samples=[], To_table='', Count=False, Output=[]):
+    def __init__(self, From_table='', Condition=[], Samples=[], To_table='', Count=False, Output=[], *args, **kwargs):
+        GeneralOutput.__init__(self, *args, **kwargs)
         self.from_table = From_table
         self.condition = Condition
         self.samples = Samples
@@ -168,7 +176,8 @@ class Exclude(Select):
         variant.select(self, reverse=True)
 
 class Output(GeneralOutput):
-    def __init__(self, Table='', Fields=[]):
+    def __init__(self, Table='', Fields=[], *args, **kwargs):
+        GeneralOutput.__init__(self, *args, **kwargs)
         self.table = Table
         self.fields = Fields
 
@@ -178,6 +187,7 @@ class Output(GeneralOutput):
 
 class Export(Args):
     def __init__(self, Table='', Filename=None, Output=None, Samples=[], Format='', Build='hg19', Header=[], Jobs=1):
+        Args.__init__(self)
         self.table = Table
         self.filename =Filename
         self.output = Output
@@ -193,6 +203,7 @@ class Export(Args):
 
 class Remove(Args):
     def __init__(self, Type='', Items=[]):
+        Args.__init__(self)
         self.type = Type
         self.items = Items
 
@@ -202,6 +213,7 @@ class Remove(Args):
 
 class Execute(Args):
     def __init__(self, Specfile='', Pipelines=[], Input=[], Output=[], Jobs=1, Delimiter='\t'):
+        Args.__init__(self)
         self.specfile = Specfile
         self.Pipelines = pipelines
         self.input = Input
@@ -215,6 +227,7 @@ class Execute(Args):
 
 class Admin(Args):
     def __init__(self, Update_resource='', Mirror_repository='', Merge_samples=False, Rename_samples=[], Rename_table=[], Describe_table=[], Validate_build=False, Validate_sex=False, Save_snapshot=[], Extra_files=[], Load_snapshot='', Set_runtime_option=[], Reset_runtime_option=''):
+        Args.__init__(self)
         self.update_resouce = Update_resource
         self.mirror_repository = Mirror_repository
         self.merge_samples = Merge_samples
