@@ -132,7 +132,7 @@ class Associate(Args):
         self.methods =Methods
         self.group_by = Group_by
         self.samples = Samples
-        self.genotypes = genotypes
+        self.genotypes = Genotypes
         self.discard_samples = Discard_samples
         self.discard_variants = Discard_variants
         self.to_db = To_db
