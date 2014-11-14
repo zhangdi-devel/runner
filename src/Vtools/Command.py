@@ -125,7 +125,7 @@ class Associate(Args):
         Args.__init__(self)
         self.variants = Variants
         self.phenotypes = Phenotypes
-        self.covariants = Covariants
+        self.covariates = Covariates
         self.var_info = Var_info
         self.geno_info = Geno_info
         self.geno_name = Geno_name
