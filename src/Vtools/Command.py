@@ -164,7 +164,7 @@ class Select(GeneralOutput):
         self.samples = Samples
         self.to_table = To_table
         self.count = Count
-        self.output = output
+        self.output = Output
 
     def Run(self):
         self.Manifest()
