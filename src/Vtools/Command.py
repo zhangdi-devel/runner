@@ -121,7 +121,7 @@ class Compare(Args):
         compare.compare(self)
 
 class Associate(Args):
-    def __init__(self, Variants='', Phenotypes=[], Covariates=[], Var_info=[], Geno_info=[], Geno_name='GT', Methods=[], Group_by=[], Samples=[], Genotypes=[], Discard_samples=[], Discard_variants=[], To_db='', Delimiter=None, Force=False, Jobs=1):
+    def __init__(self, Variants='', Phenotypes=[], Covariates=[], Var_info=[], Geno_info=[], Geno_name='GT', Methods=[], Group_by=[], Samples=[], Genotypes=[], Discard_samples=[], Discard_variants=[], To_db='', Delimiter=None, Force=False, Jobs=1, Unknown_args=None):
         Args.__init__(self)
         self.variants = Variants
         self.phenotypes = Phenotypes
@@ -139,6 +139,7 @@ class Associate(Args):
         self.delimiter = Delimiter
         self.force = Force
         self.jobs = Jobs
+        self.unknown_args = Unknown_args
 
     def Run(self):
         self.Manifest()
