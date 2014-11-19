@@ -65,7 +65,7 @@ class Update(Args):
         update.update(self)
 
 class Phenotype(Args):
-    def __init__(self, From_file=None, Set=[], From_stat=[], Output=None, Jobs=1, Genotypes=[], Samples=[], Header=None, Delimiter='\t', Na='NA', Limit=-1):
+    def __init__(self, From_file=None, Set=[], From_stat=[], Output=[], Jobs=1, Genotypes=[], Samples=[], Header=None, Delimiter='\t', Na='NA', Limit=-1):
         Args.__init__(self)
         self.from_file = From_file
         self.output = Output
