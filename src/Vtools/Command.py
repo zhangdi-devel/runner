@@ -7,6 +7,7 @@ import variant_tools.variant as variant
 import variant_tools.compare as compare
 import variant_tools.association as association
 import variant_tools.pipeline as pipeline
+import variant_tools.phenotype as phenotype
 
 class Args:
     def __init__(self):
