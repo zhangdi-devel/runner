@@ -58,14 +58,14 @@ class Update(Args):
         self.genotypes = Genotypes
 
     def Run(self):
-        if self.from_file == '' and self.from_stat == []:
-            sys.stderr('Must choose a way to update: From_file or From_stat\n')
-            return
+        #if self.from_file == '' and self.from_stat == []:
+        #    sys.stderr('Must choose a way to update: From_file or From_stat\n')
+        #    return
         self.Manifest()
         update.update(self)
 
 class Phenotype(Args):
-    def __init__(self, From_file='', Set=[], From_stat=[], Output=[], Jobs=1, Genotypes=[], Samples=[], Header=None, Delimiter='\t', Na='NA', Limit=-1):
+    def __init__(self, From_file=None, Set=None, From_stat=None, Output=None, Jobs=1, Genotypes=None, Samples=None, Header=None, Delimiter=None, Na=None, Limit=-1):
         Args.__init__(self)
         self.from_file = From_file
         self.output = Output
@@ -80,9 +80,9 @@ class Phenotype(Args):
         self.limit = Limit
 
     def Run(self):
-        if self.from_file == '' and self.from_stat == []:
-            sys.stderr('Must choose a way to update: From_file or From_stat\n')
-            return
+        #if self.from_file == '' and self.from_stat == []:
+        #    sys.stderr('Must choose a way to update: From_file or From_stat\n')
+        #    return
         self.Manifest()
         phenotype.phenotype(self)
 
