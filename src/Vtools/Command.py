@@ -57,7 +57,7 @@ class Update(Args):
         self.genotypes = Genotypes
 
     def Run(self):
-        if self.From_file == '' and self.From_stat == []:
+        if self.from_file == '' and self.from_stat == []:
             sys.stderr('Must choose a way to update: From_file or From_stat\n')
             return
         self.Manifest()
@@ -79,7 +79,7 @@ class Phenotype(Args):
         self.limit = Limit
 
     def Run(self):
-        if self.From_file == '' and self.From_stat == []:
+        if self.from_file == '' and self.from_stat == []:
             sys.stderr('Must choose a way to update: From_file or From_stat\n')
             return
         self.Manifest()
