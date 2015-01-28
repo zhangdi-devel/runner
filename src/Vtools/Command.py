@@ -104,6 +104,7 @@ class Use(Args):
         
 class Compare(Args):
     def __init__(self, Tables=[], Union=[], Intersection=[], Difference=[], Expression=[], Mode='', Samples=[], Count=False, A_diff_B=[], B_diff_A=[], A_and_B=[], A_or_B=[]):
+        Args.__init__(self)
         self.tables = Tables
         self.union = Union
         self.intersection = Intersection
