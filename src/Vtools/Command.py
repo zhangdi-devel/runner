@@ -30,7 +30,7 @@ class Init(Args):
         project.init(self)
 
 class Import(Args):
-    def __init__(self, Input_files='', Format='', Build='hg19', Sample_name=[], Force=False, Jobs=1):
+    def __init__(self, Input_files=[], Format='', Build='hg19', Sample_name=[], Force=False, Jobs=1):
         Args.__init__(self)
         self.input_files = Input_files
         self.build = Build
@@ -160,7 +160,7 @@ class GeneralOutput(Args):
         self.order_by = Order_by
         
 class Select(GeneralOutput):
-    def __init__(self, From_table='', Condition=[], Samples=[], To_table='', Count=False, Output=[], *args, **kwargs):
+    def __init__(self, From_table='', Condition=[], Samples=[], To_table=[], Count=False, Output=[], *args, **kwargs):
         GeneralOutput.__init__(self, *args, **kwargs)
         self.from_table = From_table
         self.condition = Condition
@@ -229,7 +229,20 @@ class Execute(Args):
         pipeline.execute(self)
 
 class Admin(Args):
-    def __init__(self, Update_resource='', Mirror_repository='', Merge_samples=False, Rename_samples=[], Rename_table=[], Describe_table=[], Validate_build=False, Validate_sex=False, Save_snapshot=[], Extra_files=[], Load_snapshot='', Set_runtime_option=[], Reset_runtime_option=''):
+    def __init__(self,
+                Update_resource='',
+                Mirror_repository='',
+                Merge_samples=False,
+                Rename_samples=[],
+                Rename_table=[],
+                Describe_table=[],
+                Validate_build=False,
+                Validate_sex=False,
+                Save_snapshot=[],
+                Extra_files=[],
+                Load_snapshot='',
+                Set_runtime_option=[],
+                Reset_runtime_option=''):
         Args.__init__(self)
         self.update_resouce = Update_resource
         self.mirror_repository = Mirror_repository

@@ -25,7 +25,7 @@ setup(name = NAME,
     description = "A general pipeline to run jobs in cluster",
     author = "Di Zhang",
     packages = [NAME, '{}.Vtools'.format(NAME)],
-    scripts = ['src/run.py'],
+    scripts = ['src/run.py', 'src/wesqc.py'],
     package_dir = {NAME:'src'},
     cmdclass = {'build_py': build_py }
 )

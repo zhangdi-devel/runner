@@ -1,11 +1,96 @@
 #!/usr/bin/python
 import sys, os
+from . import Command as rvc
+from ..Utils import cd
+###project
+def quickrun(runtime_parameters):
+    init_project(runtime_parameters)
+    
+##init project, import vcf and pheno
+def init_project(runtime_parameters):
+    workding_dir = '{}/1genotype_level'.format(runtime_parameters.get('general', 'maindir'))
+    os.system('mkdir -p {}/tmp'.format(workding_dir))
+    with cd(workding_dir):
+        #init
+        rvc.Init(Project='{}'.format(runtime_parameters.get('general', 'project'))).Run()
+        #set sqlite parameters
+        rvc.Admin(Set_runtime_option=['sqlite_pragma=synchronous=OFF',
+                                      'temp_dir={}/tmp'.format(workding_dir),
+                                      'journal_mode=MEMORY']).Run()
+        #import genotypes
+        rvc.Import(Input_files=runtime_parameters.get('vtools', 'vcf'),
+                   Format=runtime_parameters.get('vtools', 'format'),
+                   Jobs=runtime_parameters.get('vtools', 'jobs')).Run()
+        #import phenotypes
+        rvc.Phenotype(From_file=runtime_parameters.get('general', 'pheno')).Run()
+        
+##genotype level
+def genotype_level(runtime_parameters):
+    working_dir = '{}/1genotype_level'.format(runtime_parameters.get('general', 'maindir'))
+    with cd(working_dir):
+        #join dbSNP
+        rvc.Use(Source='dbSNP').Run()
+        #annotate with dbSNP
+        rvc.Select(From_table='variant',
+                   To_table=['variant_in', 'variants in dbSNP version 138'],
+                   Condition=['dbSNP.chr IS NOT NULL']).Run()
+        rvc.Compare(Tables=['variant', 'variant_in'],
+                    Difference=['variant_out', 'variants not in dbSNP version 138']).Run()
+
+#variant level
+def variant_level(runtime_parameters):
+    working_dir = '{}/2variant_level'.format(runtime_parameters.get('general', 'maindir'))
+    mother_dir = '{}/1genotype_level'.format(runtime_parameters.get('general', 'maindir'))
+    os.system('mkdir -p {}/tmp'.format(workding_dir))
+    os.system('rsync -a {0}/{1}_genotype.DB {0}/{1}.proj {2}/'.format(mother_dir,
+                                                                      runtime_parameters.get('general', 'project'),
+                                                                      working_dir))
+    gd = runtime_parameters.get('genotype', 'gd').split(',')
+    gq = runtime_parameters.get('genotype', 'gq')
+    jobs = runtime_parameters.get('vtools', 'jobs')
+    with cd(working_dir):
+        #1. remove low quality genotypes
+        rvc.Remove(Type='genotypes', Items=['GD<{} OR GD>={} OR GQ<{}'.format(gd[0], gd[1], gq)])
+        #2. generate genotype stats
+        rvc.Update(From_stat=['maf=maf()',
+                              'GT=#(GT)',
+                              'alt=#(alt)',
+                              'hom=#(hom)',
+                              'het=#(het)',
+                              'other=#(other)',
+                              'wtGT=#(wtGT)',
+                              'mutGT=#(mutGT)',
+                              'mis=#(missing)'], Jobs=jobs).Run()
+        #here is a hack, to loop over the batch, we must know the max(batch) first
+        
+        for batch in range(1,5):
+            rvc.Update(From_stat=['mafQC_b{}=maf()'.format(batch),
+                                  'GTQC_b{}=#(GT)'.format(batch),
+                                  'altQC_b{}=#(alt)'.format(batch),
+                                  'homQC_b{}=#(hom)'.format(batch),
+                                  'hetQC_b{}=#(het)'.format(batch),
+                                  'otherQC_b{}=#(other)'.format(batch),
+                                  'wtGTQC_b{}=#(wtGT)'.format(batch),
+                                  'mutGTQC_b{}=#(mutGT)'.format(batch),
+                                  'misQC_b{}=#(missing)'.format(batch)],
+                       Samples=['batch={}'.format(batch)]).Run()
+        rvc.Update(Set=['mrQC_b{0}=misQC_b{0}/((misQC_b{0} + GTQC_b{0}) * 1.0)'.format(batch)]).Run()
+        #total gt call for each individual
+        rvc.Phenotype(From_stat=['num=count(*)'], Jobs=jobs).Run()
+        #missing rate
+        rvc.Update(Set=['mr=mis/((mis + GT) * 1.0)']).Run()
+        #hwe p value
+        rvc.Update(Table='variant', Set=['hwe_pvalue=HWE_exact(GT, het, hom, other)']).Run()
+        #remove zombie variants, which are not variants any more because of the genotype level QC
+        rvc.Select(From_table='variant',
+                   To_table=['_snv1', 'variants after genotype level QC, some variants are gone with the removed genotypes'],
+                   Condition=['GT!=wtGT', 'GT!=mutGT']).Run()
+        
+#sample level
 
 
-#class Genotype:
 
-#class Sample:
-
+###obsolete
 class Variant:
     def __init__(self, name='variant', mother='variant', cond='1'):
         self.name = name
