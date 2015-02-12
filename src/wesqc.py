@@ -8,7 +8,7 @@ class runtime_parameters():
     def __init__(self, config_file):
         self.config_file = config_file
         self.config = ConfigParser.ConfigParser()
-        self.config.read()
+        self.config.read(self.config_file)
         
     def check(self):
         ##the main dir must exists
