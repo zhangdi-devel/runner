@@ -244,7 +244,7 @@ class Admin(Args):
                 Set_runtime_option=[],
                 Reset_runtime_option=''):
         Args.__init__(self)
-        self.update_resouce = Update_resource
+        self.update_resource = Update_resource
         self.mirror_repository = Mirror_repository
         self.merge_samples = Merge_samples
         self.rename_samples = Rename_samples
