@@ -18,9 +18,8 @@ def init_project(runtime_parameters):
         #init
         rvc.Init(Project='{}'.format(runtime_parameters.get('general', 'project'))).Run()
         #set sqlite parameters
-        rvc.Admin(Set_runtime_option=['sqlite_pragma=synchronous=OFF',
-                                      'temp_dir={}/tmp'.format(workding_dir),
-                                      'journal_mode=MEMORY']).Run()
+        rvc.Admin(Set_runtime_option=['sqlite_pragma=synchronous=OFF,journal_mode=MEMORY',
+                                      'temp_dir={}/tmp'.format(workding_dir)]).Run()
         #import genotypes
         rvc.Import(Input_files=runtime_parameters.get('vtools', 'vcf'),
                    Format=runtime_parameters.get('vtools', 'format'),
