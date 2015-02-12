@@ -9,7 +9,7 @@ from shutil import move
 from os.path import basename
 #import mysql.connector as mc
 
-class Region:
+class region:
     def __init__(self, chr, start, end, strand):
         self.chr = chr
         self.start = start
@@ -21,7 +21,7 @@ class Region:
     def seq(self):
         return ''
 
-class Gene(region):
+class gene(region):
     def __init__(self, chr, start, end, strand, name):
         region.__init__(self, chr, start, end, strand)
         self.name = name
@@ -31,7 +31,7 @@ class Gene(region):
         self.exons.append(exon)
 
 
-class Exon(region):
+class exon(region):
     def __init__(self, chr, start, end, strand, gene=''):
         region.__init__(self, chr, start, end, strand)
         self.gene = gene
