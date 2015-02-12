@@ -10,6 +10,15 @@ class runtime_parameters():
         self.config = ConfigParser.ConfigParser()
         self.config.read(self.config_file)
         
+    def get(self, section, key):
+        return self.config.get(section, key)
+    
+    def getint(self, section, key):
+        return self.config.getint(section, key)
+    
+    def getfloat(self, section, key):
+        return self.config.getfloat(section, key)
+        
     def check(self):
         ##the main dir must exists
         if os.path.isdir(self.config.get('general', 'maindir')):
