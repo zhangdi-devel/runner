@@ -250,7 +250,7 @@ class Admin(Args):
         self.rename_samples = Rename_samples
         self.rename_table = Rename_table
         self.describe_table = Describe_table
-        self.validate_table = Validate_table
+        self.validate_build = Validate_build
         self.validate_sex = Validate_sex
         self.save_snapshot = Save_snapshot
         self.extra_files = Extra_files
