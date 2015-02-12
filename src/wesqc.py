@@ -7,7 +7,7 @@ import Runner.Vtools.Pipeline as rvp
 class runtime_parameters():
     def __init__(self, config_file):
         self.config_file = config_file
-        self.config = ConfigParser.ConfigParser()
+        self.config = ConfigParser.SafeConfigParser()
         self.config.read(self.config_file)
         
     def get(self, section, key):
@@ -27,7 +27,7 @@ class runtime_parameters():
             sys.stderr.write('maindir "{}" does not exists\n'.format(self.config.get('general', 'maindir')))
             return False
         ##vtools input files
-        for k, v in map(lambda x: (x, self.config.get('general', x)), ['vcf', 'format', 'pheno']):
+        for k, v in map(lambda x: (x, self.config.get('vtools', x)), ['vcf', 'format', 'pheno']):
             if os.path.isfile(v):
                 sys.stdout.write('vtools input file {}: {}\n'.format(k, v))
             else:

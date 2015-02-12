@@ -49,7 +49,6 @@ class Update(Args):
         self.table = Table
         self.from_file = From_file
         self.format = Format
-        self.build = Build
         self.jobs = Jobs
         self.sample_name =Sample_name
         self.set = Set
