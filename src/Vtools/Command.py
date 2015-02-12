@@ -243,9 +243,9 @@ class Admin(Args):
                 Load_snapshot='',
                 Set_runtime_option=[],
                 Reset_runtime_option='',
-                Record_exe_info=[],
-                Partial_md5=[],
-                Fasta2crr=[]):
+                Record_exe_info=None,
+                Partial_md5=None,
+                Fasta2crr=None):
         Args.__init__(self)
         self.update_resource = Update_resource
         self.mirror_repository = Mirror_repository
