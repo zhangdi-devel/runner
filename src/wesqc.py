@@ -25,9 +25,6 @@ class runtime_parameters():
                 sys.stdout.write('vtools input file {}: "{}" does not exists\n'.format(k, v))
                 return False
         return True
-        
-class worker():
-    
 
 def main():
     parser = ArgumentParser()

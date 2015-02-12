@@ -215,7 +215,7 @@ class Remove(Args):
         project.remove(self)
 
 class Execute(Args):
-    def __init__(self, Specfile='', Pipelines=[], Input=[], Output=[], Jobs=1, Delimiter='\t'):
+    def __init__(self, Specfile=None, Pipelines=[], Input=[], Output=[], Jobs=1, Delimiter='\t', Extra_args=''):
         Args.__init__(self)
         self.specfile = Specfile
         self.Pipelines = pipelines
@@ -223,6 +223,7 @@ class Execute(Args):
         self.output = Output
         self.jobs = Jobs
         self.delimiter = Delimiter
+        self.unknown_args = Extra_args.split()
 
     def Run(self):
         self.Manifest()
