@@ -242,7 +242,10 @@ class Admin(Args):
                 Extra_files=[],
                 Load_snapshot='',
                 Set_runtime_option=[],
-                Reset_runtime_option=''):
+                Reset_runtime_option='',
+                Record_exe_info=[],
+                Partial_md5=[],
+                Fasta2crr=[]):
         Args.__init__(self)
         self.update_resource = Update_resource
         self.mirror_repository = Mirror_repository
@@ -257,6 +260,9 @@ class Admin(Args):
         self.load_snapshot = Load_snapshot
         self.set_runtime_option = Set_runtime_option
         self.reset_runtime_option = Reset_runtime_option
+        self.record_exe_info = Record_exe_info
+        self.partial_md5 = Partial_md5
+        self.fasta2crr = Fasta2crr
 
     def Run(self):
         self.Manifest()
