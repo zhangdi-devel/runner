@@ -7,7 +7,7 @@ from collections import OrderedDict, defaultdict, Counter
 from distutils.file_util import copy_file
 from shutil import move
 from os.path import basename
-import mysql.connector as mc
+#import mysql.connector as mc
 
 class Region:
     def __init__(self, chr, start, end, strand):
