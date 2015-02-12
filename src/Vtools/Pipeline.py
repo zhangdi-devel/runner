@@ -23,7 +23,7 @@ def init_project(runtime_parameters):
         #import genotypes
         rvc.Import(Input_files=[runtime_parameters.get('vtools', 'vcf')],
                    Format=runtime_parameters.get('vtools', 'format'),
-                   Jobs=runtime_parameters.get('vtools', 'jobs')).Run()
+                   Jobs=runtime_parameters.getint('vtools', 'jobs')).Run()
         #import phenotypes
         rvc.Phenotype(From_file=runtime_parameters.get('general', 'pheno')).Run()
         
