@@ -12,6 +12,7 @@ import variant_tools.phenotype as phenotype
 class Args:
     def __init__(self):
         self.verbosity = 1
+        self.unknown_args = []
     def Manifest(self):
         for k, v in vars(self).items():
             sys.stderr.write('{}: {}\n'.format(k, v))
