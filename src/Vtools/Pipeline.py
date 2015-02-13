@@ -26,7 +26,7 @@ def init_project(runtime_parameters):
                    Jobs=runtime_parameters.getint('vtools', 'jobs')).Run()
         #import phenotypes
         rvc.Phenotype(From_file=runtime_parameters.get('vtools', 'pheno'),
-                      Delimiter=':').Run()
+                      Delimiter=runtime_parameters.get('pheno', 'delimiter')).Run()
         
 ##genotype level
 def genotype_level(runtime_parameters):
