@@ -12,6 +12,7 @@ def quickrun(runtime_parameters):
     
 ##init project, import vcf and pheno
 def init_project(runtime_parameters):
+    sys.stderr.write('started init project\n')
     workding_dir = '{}/1genotype_level'.format(runtime_parameters.get('general', 'maindir'))
     os.system('mkdir -p {}/tmp'.format(workding_dir))
     with cd(workding_dir):
@@ -27,9 +28,11 @@ def init_project(runtime_parameters):
         #import phenotypes
         rvc.Phenotype(From_file=runtime_parameters.get('vtools', 'pheno'),
                       Delimiter=runtime_parameters.get('pheno', 'delimiter')).Run()
+    sys.stderr.write('finished init project\n')
         
 ##genotype level
 def genotype_level(runtime_parameters):
+    sys.stderr.write('started genotype level\n')
     working_dir = '{}/1genotype_level'.format(runtime_parameters.get('general', 'maindir'))
     with cd(working_dir):
         #join dbSNP
@@ -40,9 +43,11 @@ def genotype_level(runtime_parameters):
                    Condition=['dbSNP.chr IS NOT NULL']).Run()
         rvc.Compare(Tables=['variant', 'variant_in'],
                     Difference=['variant_out', 'variants not in dbSNP version 138']).Run()
+    sys.stderr.write('finished genotype level\n')
         
 #variant level
 def variant_level(runtime_parameters):
+    sys.stderr.write('started variant level\n')
     working_dir = '{}/2variant_level'.format(runtime_parameters.get('general', 'maindir'))
     mother_dir = '{}/1genotype_level'.format(runtime_parameters.get('general', 'maindir'))
     os.system('mkdir -p {}/tmp'.format(workding_dir))
@@ -134,9 +139,11 @@ def variant_level(runtime_parameters):
                    To_table=['_snv6',
                              'mother: _snv5, removed variants hwe_pvalue < 0.001, for sample level QC only'.format(hwe)],
                    Condition=['hwe_pvalue>={}'.format(hwe)]).Run()
+    sys.stderr.write('finished variant level\n')
                 
 #sample level
 def sample_level(runtime_parameters):
+    sys.stderr.write('started sample level\n')
     working_dir = '{}/3sample_level'.format(runtime_parameters.get('general', 'maindir'))
     mother_dir = '{}/2variant_level'.format(runtime_parameters.get('general', 'maindir'))
     os.system('mkdir -p {}/tmp'.format(workding_dir))
@@ -156,6 +163,7 @@ def sample_level(runtime_parameters):
         jobs = runtime_parameters.get('vtools', 'jobs')
         rvc.Phenotype(From_stat=['_GT=#(GT)'], Jobs=jobs).Run()
         mds()
+    sys.stderr.write('finished sample level\n')
 
 #to run the mds pipeline
 def mds(From_table='variant', Maf=0.01):
