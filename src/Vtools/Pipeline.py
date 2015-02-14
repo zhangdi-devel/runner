@@ -26,7 +26,7 @@ def init_project(runtime_parameters):
                    Format=runtime_parameters.get('vtools', 'format'),
                    Jobs=runtime_parameters.getint('vtools', 'jobs')).Run()
         #import phenotypes
-        rvc.Phenotype(From_file=runtime_parameters.get('vtools', 'pheno'),
+        rvc.Phenotype(From_file=[runtime_parameters.get('vtools', 'pheno')],
                       Delimiter=runtime_parameters.get('pheno', 'delimiter')).Run()
     sys.stderr.write('finished init project\n')
         
