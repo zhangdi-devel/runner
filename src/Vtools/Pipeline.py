@@ -117,7 +117,7 @@ def variant_level(runtime_parameters):
         mr = runtime_parameters.getfloat('variant', 'missing')
         mr_b = runtime_parameters.getfloat('variant', 'batch_missing')
         rvc.Select(From_table='_snv2',
-                   To_Table=['_snv3',
+                   To_table=['_snv3',
                              'mother: _snv2, removed variants with high missing rate (>={}%)'.format(mr * 100)],
                    Condition=['mr<{}'.format(mr)]).Run()
         #6. remove high missing rate variants in any batch
