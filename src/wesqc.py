@@ -43,9 +43,9 @@ def main():
                         help='from which step start the pipeline. default to 1')
     args = parser.parse_args()
     if os.path.isfile(args.conf):
-        rp = runtime_parameters(args.conf, int(args.step))
+        rp = runtime_parameters(args.conf)
         if rp.check():
-            rvp.quickrun(rp)
+            rvp.quickrun(rp, int(args.step))
         else:
             sys.stderr.write('runtime parameter(s) error\n')
             return False
