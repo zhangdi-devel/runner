@@ -72,7 +72,7 @@ def variant_level(runtime_parameters):
         #2. generate genotype stats
         rvc.Update(From_stat=['maf=maf()',
                               'GT=#(GT)',
-                              'alt=#(alt)',
+                              'altA=#(alt)',
                               'hom=#(hom)',
                               'het=#(het)',
                               'other=#(other)',
@@ -92,7 +92,7 @@ def variant_level(runtime_parameters):
         for batch in batches:
             rvc.Update(From_stat=['maf_b{}=maf()'.format(batch),
                                   'GT_b{}=#(GT)'.format(batch),
-                                  'alt_b{}=#(alt)'.format(batch),
+                                  'altA_b{}=#(alt)'.format(batch),
                                   'hom_b{}=#(hom)'.format(batch),
                                   'het_b{}=#(het)'.format(batch),
                                   'other_b{}=#(other)'.format(batch),
@@ -130,7 +130,7 @@ def variant_level(runtime_parameters):
             rvc.Select(From_table='_snv4',
                        To_table=['_spec_b{}'.format(batch),
                                  'mother: _snv3, variants only in batch {}, not in dbSNP version 138, and not a singleton'.format(batch)],
-                       Condition=['alt_b{}=alt'.format(batch), 'alt>1', 'dbSNP.chr IS NULL']).Run()
+                       Condition=['altA_b{}=altA'.format(batch), 'altA>1', 'dbSNP.chr IS NULL']).Run()
         #all batch specific variants
         rvc.Compare(Tables=map(lambda x: '_spec_b{}'.format(x), batches),
                     Union=['_spec_all',
