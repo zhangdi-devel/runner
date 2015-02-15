@@ -50,7 +50,7 @@ def variant_level(runtime_parameters):
     sys.stderr.write('started variant level\n')
     working_dir = '{}/2variant_level'.format(runtime_parameters.get('general', 'maindir'))
     mother_dir = '{}/1genotype_level'.format(runtime_parameters.get('general', 'maindir'))
-    os.system('mkdir -p {}/tmp'.format(workding_dir))
+    os.system('mkdir -p {}/tmp'.format(working_dir))
     os.system('rsync -a {0}/{1}_genotype.DB {0}/{1}.proj {2}/'.format(mother_dir,
                                                                       runtime_parameters.get('general', 'project'),
                                                                       working_dir))
