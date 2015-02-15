@@ -88,7 +88,7 @@ class Phenotype(Args):
         phenotype.phenotype(self)
 
 class Use(Args):
-    def __init__(self, Source='', As='', Linked_by=[], Anno_type='', Linked_fields=[], Files=[], Rebuild=False, Jobs=1):
+    def __init__(self, Source='', As=None, Linked_by=[], Anno_type='', Linked_fields=[], Files=[], Rebuild=False, Jobs=1):
         Args.__init__(self)
         self.source = Source
         setattr(self, 'as', As) #hack ...
