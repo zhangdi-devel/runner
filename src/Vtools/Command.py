@@ -232,7 +232,7 @@ class Execute(Args):
     def __init__(self, Specfile=None, Pipelines=[], Input=[], Output=[], Jobs=1, Delimiter='\t', Extra_args=''):
         Args.__init__(self)
         self.specfile = Specfile
-        self.Pipelines = pipelines
+        self.pipelines = Pipelines
         self.input = Input
         self.output = Output
         self.jobs = Jobs

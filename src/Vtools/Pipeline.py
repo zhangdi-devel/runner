@@ -62,7 +62,7 @@ def variant_level(runtime_parameters):
                                                                       working_dir))
     gd = runtime_parameters.get('genotype', 'gd').split(',')
     gq = runtime_parameters.get('genotype', 'gq')
-    jobs = runtime_parameters.get('vtools', 'jobs')
+    jobs = runtime_parameters.getint('vtools', 'jobs')
     with cd(working_dir):
         #0. set sqlite parameters
         rvc.Admin(Set_runtime_option=['sqlite_pragma=synchronous=OFF,journal_mode=MEMORY',
@@ -165,7 +165,7 @@ def sample_level(runtime_parameters):
                     Difference=['_snv6_c', 'mother: variant, the complement of _snv6']).Run()
         rvc.Remove(Type='variants', Items=['_snv6_c'])
         #total gt call for each individual
-        jobs = runtime_parameters.get('vtools', 'jobs')
+        jobs = runtime_parameters.getint('vtools', 'jobs')
         rvc.Phenotype(From_stat=['_GT=#(GT)'], Jobs=jobs).Run()
         mds()
     sys.stderr.write('finished sample level\n')
@@ -173,10 +173,10 @@ def sample_level(runtime_parameters):
 #to run the mds pipeline
 def mds(From_table='variant', Maf=0.01):
     rvc.Select(From_table=From_table,
-               To_table=['_mds',
+               To_table=['mds',
                          'mother: variant, removed variants with maf =< {}%'.format(Maf * 100)],
                Condition=['maf>{}'.format(Maf)]).Run()
-    rvc.Execute(Specfile='KING', Extra_args='--var_table _mds').Run()
+    rvc.Execute(Specfile='KING', Extra_args='--var_table mds --jobname mds').Run()
         
         
 ###obsolete
