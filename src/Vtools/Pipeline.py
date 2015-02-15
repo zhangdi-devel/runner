@@ -17,15 +17,15 @@ def quickrun(runtime_parameters, step=1):
 ##init project, import vcf and pheno
 def init_project(runtime_parameters):
     sys.stderr.write('started init project\n')
-    workding_dir = '{}/1genotype_level'.format(runtime_parameters.get('general', 'maindir'))
+    working_dir = '{}/1genotype_level'.format(runtime_parameters.get('general', 'maindir'))
     os.system('rm -rf {}'.format(working_dir))
-    os.system('mkdir -p {}/tmp'.format(workding_dir))
-    with cd(workding_dir):
+    os.system('mkdir -p {}/tmp'.format(working_dir))
+    with cd(working_dir):
         #init
         rvc.Init(Project='{}'.format(runtime_parameters.get('general', 'project'))).Run()
         #set sqlite parameters
         rvc.Admin(Set_runtime_option=['sqlite_pragma=synchronous=OFF,journal_mode=MEMORY',
-                                      'temp_dir={}/tmp'.format(workding_dir)]).Run()
+                                      'temp_dir={}/tmp'.format(working_dir)]).Run()
         #import genotypes
         rvc.Import(Input_files=[runtime_parameters.get('vtools', 'vcf')],
                    Format=runtime_parameters.get('vtools', 'format'),
@@ -65,9 +65,8 @@ def variant_level(runtime_parameters):
     jobs = runtime_parameters.get('vtools', 'jobs')
     with cd(working_dir):
         #0. set sqlite parameters
-        rvc.Admin(Set_runtime_option=['sqlite_pragma=synchronous=OFF',
-                                      'temp_dir={}/tmp'.format(working_dir),
-                                      'journal_mode=MEMORY']).Run() 
+        rvc.Admin(Set_runtime_option=['sqlite_pragma=synchronous=OFF,journal_mode=MEMORY',
+                                      'temp_dir={}/tmp'.format(working_dir)]).Run()
         #1. remove low quality genotypes
         rvc.Remove(Type='genotypes', Items=['GD<{} OR GD>={} OR GQ<{}'.format(gd[0], gd[1], gq)])
         #2. generate genotype stats
@@ -152,15 +151,15 @@ def sample_level(runtime_parameters):
     sys.stderr.write('started sample level\n')
     working_dir = '{}/3sample_level'.format(runtime_parameters.get('general', 'maindir'))
     mother_dir = '{}/2variant_level'.format(runtime_parameters.get('general', 'maindir'))
-    os.system('mkdir -p {}/tmp'.format(workding_dir))
+    os.system('rm -rf {}'.format(working_dir))
+    os.system('mkdir -p {}/tmp'.format(working_dir))
     os.system('rsync -a {0}/{1}_genotype.DB {0}/{1}.proj {2}/'.format(mother_dir,
                                                                       runtime_parameters.get('general', 'project'),
                                                                       working_dir))
     with cd(working_dir):
         #0. set sqlite parameters
-        rvc.Admin(Set_runtime_option=['sqlite_pragma=synchronous=OFF',
-                                      'temp_dir={}/tmp'.format(workding_dir),
-                                      'journal_mode=MEMORY']).Run()
+        rvc.Admin(Set_runtime_option=['sqlite_pragma=synchronous=OFF,journal_mode=MEMORY',
+                                      'temp_dir={}/tmp'.format(working_dir)]).Run()
         #1. remove unrelevant variants, so we can compute sample level counts based on the variants we want
         rvc.Compare(Tables=['variant', '_snv6'],
                     Difference=['_snv6_c', 'mother: variant, the complement of _snv6']).Run()
