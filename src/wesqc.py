@@ -39,9 +39,11 @@ def main():
     parser = ArgumentParser()
     parser.add_argument('-c', '--conf', default='wesqc.conf', metavar='File',
                         help='set config file, default to wesqc.conf')
+    parser.add_argument('-s', '--step', default=1, metavar='INT',
+                        help='from which step start the pipeline. default to 1')
     args = parser.parse_args()
     if os.path.isfile(args.conf):
-        rp = runtime_parameters(args.conf)
+        rp = runtime_parameters(args.conf, int(args.step))
         if rp.check():
             rvp.quickrun(rp)
         else:

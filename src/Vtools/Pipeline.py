@@ -4,16 +4,21 @@ from . import Command as rvc
 from ..Utils import cd
 
 ###QC in one command
-def quickrun(runtime_parameters):
-    init_project(runtime_parameters)
-    genotype_level(runtime_parameters)
-    variant_level(runtime_parameters)
-    sample_level(runtime_parameters)
+def quickrun(runtime_parameters, step=1):
+    if step <= 1:
+        init_project(runtime_parameters)
+    if step <= 2:
+        genotype_level(runtime_parameters)
+    if step <= 3:
+        variant_level(runtime_parameters)
+    if step <= 4:
+        sample_level(runtime_parameters)
     
 ##init project, import vcf and pheno
 def init_project(runtime_parameters):
     sys.stderr.write('started init project\n')
     workding_dir = '{}/1genotype_level'.format(runtime_parameters.get('general', 'maindir'))
+    os.system('rm -rf {}'.format(working_dir))
     os.system('mkdir -p {}/tmp'.format(workding_dir))
     with cd(workding_dir):
         #init
@@ -50,6 +55,7 @@ def variant_level(runtime_parameters):
     sys.stderr.write('started variant level\n')
     working_dir = '{}/2variant_level'.format(runtime_parameters.get('general', 'maindir'))
     mother_dir = '{}/1genotype_level'.format(runtime_parameters.get('general', 'maindir'))
+    os.system('rm -rf {}'.format(working_dir))
     os.system('mkdir -p {}/tmp'.format(working_dir))
     os.system('rsync -a {0}/{1}_genotype.DB {0}/{1}.proj {2}/'.format(mother_dir,
                                                                       runtime_parameters.get('general', 'project'),
@@ -60,7 +66,7 @@ def variant_level(runtime_parameters):
     with cd(working_dir):
         #0. set sqlite parameters
         rvc.Admin(Set_runtime_option=['sqlite_pragma=synchronous=OFF',
-                                      'temp_dir={}/tmp'.format(workding_dir),
+                                      'temp_dir={}/tmp'.format(working_dir),
                                       'journal_mode=MEMORY']).Run() 
         #1. remove low quality genotypes
         rvc.Remove(Type='genotypes', Items=['GD<{} OR GD>={} OR GQ<{}'.format(gd[0], gd[1], gq)])
