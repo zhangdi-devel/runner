@@ -93,7 +93,7 @@ class Phenotype(Args):
         sleep(3) #sleep 3 seconds
 
 class Use(Args):
-    def __init__(self, Source='', As=None, Linked_by=[], Anno_type='', Linked_fields=[], Files=[], Rebuild=False, Jobs=1):
+    def __init__(self, Source='', As=None, Linked_by=[], Anno_type='', Linked_fields=[], Files=None, Rebuild=False, Jobs=1):
         Args.__init__(self)
         self.source = Source
         setattr(self, 'as', As) #hack ...
