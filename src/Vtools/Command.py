@@ -9,6 +9,7 @@ import variant_tools.association as association
 import variant_tools.pipeline as pipeline
 import variant_tools.phenotype as phenotype
 import variant_tools.annotation as annotation
+from time import sleep
 
 class Args:
     def __init__(self):
@@ -30,6 +31,7 @@ class Init(Args):
     def Run(self):
         self.Manifest()
         project.init(self)
+        sleep(3) #sleep 3 seconds
 
 class Import(Args):
     def __init__(self, Input_files=[], Format='', Build='hg19', Sample_name=[], Force=False, Jobs=1):
@@ -44,6 +46,7 @@ class Import(Args):
     def Run(self):
         self.Manifest()
         importer.importVariants(self)
+        sleep(3) #sleep 3 seconds
 
 class Update(Args):
     def __init__(self, Table='variant', From_file='', Format='', Sample_name=[], Jobs=1, Set=[], From_stat=[], Samples=[], Genotypes=[]):
@@ -64,6 +67,7 @@ class Update(Args):
         #    return
         self.Manifest()
         update.update(self)
+        sleep(3) #sleep 3 seconds
 
 class Phenotype(Args):
     def __init__(self, From_file=None, Set=[], From_stat=[], Output=[], Jobs=1, Genotypes=[], Samples=[], Header=None, Delimiter='\t', Na='NA', Limit=-1):
@@ -86,6 +90,7 @@ class Phenotype(Args):
         #    return
         self.Manifest()
         phenotype.phenotype(self)
+        sleep(3) #sleep 3 seconds
 
 class Use(Args):
     def __init__(self, Source='', As=None, Linked_by=[], Anno_type='', Linked_fields=[], Files=[], Rebuild=False, Jobs=1):
@@ -102,6 +107,7 @@ class Use(Args):
     def Run(self):
         self.Manifest()
         annotation.use(self)
+        sleep(3) #sleep 3 seconds
         
 class Compare(Args):
     def __init__(self, Tables=[], Union=[], Intersection=[], Difference=[], Expression=None, Mode=None, Samples=[], Count=False, A_diff_B=[], B_diff_A=[], A_and_B=[], A_or_B=[]):
@@ -122,6 +128,7 @@ class Compare(Args):
     def Run(self):
         self.Manifest()
         compare.compare(self)
+        sleep(3) #sleep 3 seconds
 
 class Associate(Args):
     def __init__(self, Variants='', Phenotypes=[], Covariates=[], Var_info=[], Geno_info=[], Geno_name='GT', Methods=[], Group_by=[], Samples=[], Genotypes=[], Discard_samples=[], Discard_variants=[], To_db='', Delimiter=None, Force=False, Jobs=1, Unknown_args=[]):
@@ -147,6 +154,7 @@ class Associate(Args):
     def Run(self):
         self.Manifest()
         association.associate(self)
+        sleep(3) #sleep 3 seconds
 
 class GeneralOutput(Args):
     def __init__(self, Header=[], Delimiter=None, Na='.', Limit=None, Build='hg19', Group_by=[], All=False, Order_by=[]):
@@ -173,11 +181,13 @@ class Select(GeneralOutput):
     def Run(self):
         self.Manifest()
         variant.select(self)
+        sleep(3) #sleep 3 seconds
 
 class Exclude(Select):
     def Run(self):
         self.Manifest()
         variant.select(self, reverse=True)
+        sleep(3) #sleep 3 seconds
 
 class Output(GeneralOutput):
     def __init__(self, Table='', Fields=[], *args, **kwargs):
@@ -188,6 +198,7 @@ class Output(GeneralOutput):
     def Run(self):
         self.Manifest()
         variant.output(self)
+        sleep(3) #sleep 3 seconds
 
 class Export(Args):
     def __init__(self, Table='', Filename=None, Output=None, Samples=[], Format='', Build='hg19', Header=[], Jobs=1):
@@ -204,6 +215,7 @@ class Export(Args):
     def Run(self):
         self.Manifest()
         exporter.export(self)
+        sleep(3) #sleep 3 seconds
 
 class Remove(Args):
     def __init__(self, Type='', Items=[]):
@@ -214,6 +226,7 @@ class Remove(Args):
     def Run(self):
         self.Manifest()
         project.remove(self)
+        sleep(3) #sleep 3 seconds
 
 class Execute(Args):
     def __init__(self, Specfile=None, Pipelines=[], Input=[], Output=[], Jobs=1, Delimiter='\t', Extra_args=''):
@@ -229,6 +242,7 @@ class Execute(Args):
     def Run(self):
         self.Manifest()
         pipeline.execute(self)
+        sleep(3) #sleep 3 seconds
 
 class Admin(Args):
     def __init__(self,
@@ -269,3 +283,4 @@ class Admin(Args):
     def Run(self):
         self.Manifest()
         project.admin(self)
+        sleep(3) #sleep 3 seconds
