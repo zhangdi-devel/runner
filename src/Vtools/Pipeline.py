@@ -68,7 +68,7 @@ def variant_level(runtime_parameters):
         rvc.Admin(Set_runtime_option=['sqlite_pragma=synchronous=OFF,journal_mode=MEMORY',
                                       'temp_dir={}/tmp'.format(working_dir)]).Run()
         #1. remove low quality genotypes
-        rvc.Remove(Type='genotypes', Items=['GD<{} OR GD>={} OR GQ<{}'.format(gd[0], gd[1], gq)])
+        rvc.Remove(Type='genotypes', Items=['GD<{} OR GD>={} OR GQ<{}'.format(gd[0], gd[1], gq)]).Run()
         #2. generate genotype stats
         rvc.Update(From_stat=['maf=maf()',
                               'GT=#(GT)',
