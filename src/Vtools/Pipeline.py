@@ -4,14 +4,21 @@ from . import Command as rvc
 from ..Utils import cd
 
 ###QC in one command
-def quickrun(runtime_parameters, step=1):
-    if step <= 1:
+def quickrun(runtime_parameters, step):
+    bounds = map(int, step.split('-'))
+    start = bounds[0]
+    if len(bounds) == 1:
+        end = 3
+    else:
+        end = bounds[1]
+    steps = range(start, end + 1)
+    if 0 in steps:
         init_project(runtime_parameters)
-    if step <= 2:
+    if 1 in steps:
         genotype_level(runtime_parameters)
-    if step <= 3:
+    if 2 in steps:
         variant_level(runtime_parameters)
-    if step <= 4:
+    if 3 in steps:
         sample_level(runtime_parameters)
     
 ##init project, import vcf and pheno

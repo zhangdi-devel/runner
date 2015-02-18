@@ -39,8 +39,8 @@ def main():
     parser = ArgumentParser()
     parser.add_argument('-c', '--conf', default='wesqc.conf', metavar='File',
                         help='set config file, default to wesqc.conf')
-    parser.add_argument('-s', '--step', default=1, metavar='INT',
-                        help='from which step start the pipeline. default to 1')
+    parser.add_argument('-s', '--step', default=0, metavar='STR',
+                        help='run the pipeline on steps . default to 0. Could be 1-3, 1-2, 0-3 etc. Currently the max step is 3.')
     args = parser.parse_args()
     if os.path.isfile(args.conf):
         rp = runtime_parameters(args.conf)
