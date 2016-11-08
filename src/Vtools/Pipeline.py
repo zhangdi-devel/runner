@@ -2,6 +2,7 @@
 import sys, os, sqlite3
 from . import Command as rvc
 from ..Utils import cd
+from time import gmtime, strftime
 
 ###QC in one command
 def quickrun(runtime_parameters, step):
@@ -13,13 +14,21 @@ def quickrun(runtime_parameters, step):
         end = bounds[1]
     steps = range(start, end + 1)
     if 0 in steps:
+        sys.stdout.write("{}\n".format(strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())))
         init_project(runtime_parameters)
+        sys.stdout.write("{}\n".format(strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())))
     if 1 in steps:
+        sys.stdout.write("{}\n".format(strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())))
         genotype_level(runtime_parameters)
+        sys.stdout.write("{}\n".format(strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())))
     if 2 in steps:
+        sys.stdout.write("{}\n".format(strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())))
         variant_level(runtime_parameters)
+        sys.stdout.write("{}\n".format(strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())))
     if 3 in steps:
+        sys.stdout.write("{}\n".format(strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())))
         sample_level(runtime_parameters)
+        sys.stdout.write("{}\n".format(strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())))
     
 ##init project, import vcf and pheno
 def init_project(runtime_parameters):
@@ -34,13 +43,16 @@ def init_project(runtime_parameters):
         rvc.Admin(Set_runtime_option=['sqlite_pragma=synchronous=OFF,journal_mode=MEMORY',
                                       'temp_dir={}/tmp'.format(working_dir)]).Run()
         #import genotypes
+        sys.stdout.write("{}\n".format(strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())))
         rvc.Import(Input_files=[runtime_parameters.get('vtools', 'vcf')],
                    Format=runtime_parameters.get('vtools', 'format'),
                    Jobs=runtime_parameters.getint('vtools', 'jobs')).Run()
         #import phenotypes
+        sys.stdout.write("{}\n".format(strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())))
         rvc.Phenotype(From_file=[runtime_parameters.get('vtools', 'pheno')],
                       Delimiter=runtime_parameters.get('pheno', 'delimiter')).Run()
     sys.stderr.write('finished init project\n')
+    sys.stdout.write("{}\n".format(strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())))
         
 ##genotype level
 def genotype_level(runtime_parameters):
@@ -75,8 +87,10 @@ def variant_level(runtime_parameters):
         rvc.Admin(Set_runtime_option=['sqlite_pragma=synchronous=OFF,journal_mode=MEMORY',
                                       'temp_dir={}/tmp'.format(working_dir)]).Run()
         #1. remove low quality genotypes
+        sys.stdout.write("{}\n".format(strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())))
         rvc.Remove(Type='genotypes', Items=['GD<{} OR GD>={} OR GQ<{}'.format(gd[0], gd[1], gq)]).Run()
         #2. generate genotype stats
+        sys.stdout.write("{}\n".format(strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())))
         rvc.Update(From_stat=['maf=maf()',
                               'GT=#(GT)',
                               'altA=#(alt)',
@@ -106,12 +120,18 @@ def variant_level(runtime_parameters):
                                   'wtGT_b{}=#(wtGT)'.format(batch),
                                   'mutGT_b{}=#(mutGT)'.format(batch),
                                   'mis_b{}=#(missing)'.format(batch)],
-                       Samples=['{}={}'.format(batch_column_name, batch)],
+                       Samples=['{}="{}"'.format(batch_column_name, batch)],
                        Jobs=jobs).Run()
             #missing rate
             rvc.Update(Set=['mr_b{0}=mis_b{0}/((mis_b{0} + GT_b{0}) * 1.0)'.format(batch)], Jobs=jobs).Run()
         #hwe p value
-        rvc.Update(Set=['hwe_pvalue=HWE_exact(GT, het, hom, other)'], Jobs=jobs).Run()
+        rvc.Update(From_stat=['ctrl_GT=#(GT)',
+                              'ctrl_het=#(het)',
+                              'ctrl_hom=#(hom)',
+                              'ctrl_other=#(other)'],
+                   Samples=['control=1'],
+                   Jobs=jobs).Run()
+        rvc.Update(Set=['hwe_pvalue=HWE_exact(ctrl_GT, ctrl_het, ctrl_hom, ctrl_other)'], Jobs=jobs).Run()
         #3. remove zombie variants, which are not variants any more because of the genotype level QC
         rvc.Select(From_table='variant',
                    To_table=['_snv1', 'mother: variant, after genotype level QC, some variants are gone with the removed genotypes'],
@@ -149,7 +169,7 @@ def variant_level(runtime_parameters):
         hwe = runtime_parameters.get('variant', 'hwe_mds')
         rvc.Select(From_table='_snv5',
                    To_table=['_snv6',
-                             'mother: _snv5, removed variants hwe_pvalue < 0.001, for sample level QC only'.format(hwe)],
+                             'mother: _snv5, removed variants hwe_pvalue < {}, for sample level QC only'.format(hwe)],
                    Condition=['hwe_pvalue>={}'.format(hwe)]).Run()
     sys.stderr.write('finished variant level\n')
                 
@@ -170,7 +190,7 @@ def sample_level(runtime_parameters):
         #1. remove unrelevant variants, so we can compute sample level counts based on the variants we want
         rvc.Compare(Tables=['variant', '_snv6'],
                     Difference=['_snv6_c', 'mother: variant, the complement of _snv6']).Run()
-        rvc.Remove(Type='variants', Items=['_snv6_c'])
+        rvc.Remove(Type='variants', Items=['_snv6_c']).Run()
         #total gt call for each individual
         jobs = runtime_parameters.getint('vtools', 'jobs')
         rvc.Phenotype(From_stat=['_GT=#(GT)'], Jobs=jobs).Run()
